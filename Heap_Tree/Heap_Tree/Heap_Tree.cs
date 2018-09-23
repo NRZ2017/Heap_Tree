@@ -72,6 +72,8 @@ namespace Heap_Tree
             }
 
             T ret = HTree[0];
+            HTree[0] = HTree[Count - 1];
+
             //remove the root
             //place the last item into index 0
             Count--;
@@ -84,24 +86,35 @@ namespace Heap_Tree
             int left = Left(index);
             int right = Right(index);
 
-            if (left < Count && HTree[index].CompareTo(HTree[left]) <= 0)
+            int smaller = index;
+            if (left < Count && right < Count)
             {
-                Swap(index, left);
-                HeapifyDown(left);
+                smaller = left;
+                if (HTree[right].CompareTo(HTree[left]) < 0)
+                {
+                    smaller = right;
+                }
+            }
+            else if (left < Count)
+            {
+                smaller = left;
+            }
+            else if (right < Count)
+            {
+                smaller = right;
             }
 
-            if (right < Count && HTree[parent].CompareTo(HTree[right]) <= 0)
+            if (smaller != index && HTree[smaller].CompareTo(HTree[index]) < 0)
             {
-                parent = right;
-                Swap(index, parent);
-                HeapifyDown(parent);
+                Swap(smaller, index);
+                HeapifyDown(smaller);
             }
         }
 
         private void ChangeSize(int size)
         {
             T[] ts = new T[size];
-            for (int i = 0; i < HTree.Length; i++)
+            for (int i = 0; i < Count; i++)
             {
                 ts[i] = HTree[i];
             }
